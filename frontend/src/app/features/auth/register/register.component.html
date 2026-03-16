@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm mt-4">
+      <div class="card-body p-4">
+        <h3 class="card-title text-center fw-bold mb-4">Create Account</h3>
+
+        <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" class="form-control" formControlName="name"
+              [class.is-invalid]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+            <div class="invalid-feedback">Name is required.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email Address</label>
+            <input type="email" class="form-control" formControlName="email"
+              [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" class="form-control" formControlName="password"
+              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            <div class="invalid-feedback">Password must be at least 6 characters.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Phone (optional)</label>
+            <input type="tel" class="form-control" formControlName="phone" placeholder="+216 XX XXX XXX">
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold d-block">I am a:</label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="role" value="BUYER" id="roleBuyer">
+              <label class="form-check-label" for="roleBuyer">🔧 Buyer (I need parts)</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="role" value="SELLER" id="roleSeller">
+              <label class="form-check-label" for="roleSeller">🏪 Seller (I sell parts)</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ loading ? 'Creating account...' : 'Create Account' }}
+          </button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+          Already have an account? <a routerLink="/auth/login">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

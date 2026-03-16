@@ -1,0 +1,72 @@
+@import 'bootstrap/scss/bootstrap';
+
+// Custom Variables
+$primary: #2c3e50;
+$danger: #e74c3c;
+
+// Global Styles
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #3d5a73 100%);
+}
+
+.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+  }
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.table th {
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}
+
+// Form controls focus style
+.form-control:focus,
+.form-select:focus {
+  border-color: #2c3e50;
+  box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.2);
+}
+
+.btn-primary {
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+
+  &:hover {
+    background-color: #1a252f;
+    border-color: #1a252f;
+  }
+}
+
+.bg-primary {
+  background-color: #2c3e50 !important;
+}
+
+.text-primary {
+  color: #2c3e50 !important;
+}
+
+// Progress bar
+.progress {
+  border-radius: 10px;
+}

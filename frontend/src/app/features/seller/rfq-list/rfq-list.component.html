@@ -1,0 +1,118 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">Open Part Requests</h2>
+</div>
+
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading RFQs...</p>
+</div>
+
+<div *ngIf="!loading && rfqs.length === 0" class="text-center py-5">
+  <div class="display-1">📋</div>
+  <h4 class="mt-3">No open requests at the moment</h4>
+  <p class="text-muted">Check back later for new part requests.</p>
+</div>
+
+<div *ngIf="!loading && rfqs.length > 0">
+  <div class="card border-0 shadow-sm mb-3" *ngFor="let rfq of rfqs">
+    <div class="card-body">
+      <div class="row align-items-start">
+        <div class="col-md-8">
+          <h5 class="fw-bold mb-1">{{ rfq.partName }}</h5>
+          <p class="text-muted mb-1">
+            🚗 {{ rfq.carBrand }} {{ rfq.carModel }} ({{ rfq.carYear }})
+            <span *ngIf="rfq.vin" class="ms-2 text-muted small">VIN: {{ rfq.vin }}</span>
+          </p>
+          <p class="mb-1">
+            <span class="badge bg-info text-dark me-2">{{ rfq.partCategory }}</span>
+            <span class="badge bg-secondary me-2">{{ rfq.preferredCondition }}</span>
+            <span class="text-muted small">📍 {{ rfq.location }}</span>
+          </p>
+          <p class="text-muted small mt-2">{{ rfq.description }}</p>
+          <p class="text-muted small mb-0">
+            Posted by <strong>{{ rfq.buyerName }}</strong> on {{ rfq.createdAt | date:'mediumDate' }}
+            · {{ rfq.quoteCount }} quote(s) so far
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+          <button class="btn btn-primary btn-sm"
+            *ngIf="activeQuoteFormRfqId !== rfq.id"
+            (click)="openQuoteForm(rfq.id)">
+            Submit Quote
+          </button>
+          <button class="btn btn-outline-secondary btn-sm"
+            *ngIf="activeQuoteFormRfqId === rfq.id"
+            (click)="closeQuoteForm()">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <!-- Inline Quote Form -->
+      <div *ngIf="activeQuoteFormRfqId === rfq.id" class="mt-3 pt-3 border-top">
+        <h6 class="fw-bold text-primary mb-3">Submit Your Quote</h6>
+        <div *ngIf="quoteError" class="alert alert-danger py-2">{{ quoteError }}</div>
+        <form [formGroup]="quoteForm" (ngSubmit)="submitQuote()">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold small">Price (TND) *</label>
+              <input type="number" class="form-control form-control-sm" formControlName="price"
+                placeholder="0.00" step="0.01"
+                [class.is-invalid]="quoteForm.get('price')?.invalid && quoteForm.get('price')?.touched">
+              <div class="invalid-feedback">Valid price required.</div>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-semibold small">Condition *</label>
+              <select class="form-select form-select-sm" formControlName="condition">
+                <option *ngFor="let c of conditions" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-semibold small">Delivery (days) *</label>
+              <input type="number" class="form-control form-control-sm" formControlName="deliveryTime"
+                min="1"
+                [class.is-invalid]="quoteForm.get('deliveryTime')?.invalid && quoteForm.get('deliveryTime')?.touched">
+              <div class="invalid-feedback">Required.</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold small">Shipping Method *</label>
+              <select class="form-select form-select-sm" formControlName="shippingMethod">
+                <option *ngFor="let s of shippingMethods" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold small">Message to Buyer *</label>
+              <textarea class="form-control form-control-sm" formControlName="message" rows="2"
+                placeholder="Describe the part, its origin, warranty, etc."
+                [class.is-invalid]="quoteForm.get('message')?.invalid && quoteForm.get('message')?.touched"></textarea>
+              <div class="invalid-feedback">Message is required.</div>
+            </div>
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-success btn-sm" [disabled]="quoteLoading">
+                <span *ngIf="quoteLoading" class="spinner-border spinner-border-sm me-1"></span>
+                {{ quoteLoading ? 'Submitting...' : 'Submit Quote' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center gap-2 mt-4" *ngIf="totalPages > 1">
+    <button class="btn btn-outline-primary btn-sm" (click)="prevPage()" [disabled]="currentPage === 0">
+      ← Previous
+    </button>
+    <span class="align-self-center text-muted">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+    <button class="btn btn-outline-primary btn-sm" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+      Next →
+    </button>
+  </div>
+</div>

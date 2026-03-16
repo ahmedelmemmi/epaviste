@@ -1,0 +1,81 @@
+<h2 class="fw-bold mb-4">Order Tracking</h2>
+
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading orders...</p>
+</div>
+
+<div *ngIf="!loading && orders.length === 0" class="text-center py-5">
+  <div class="display-1">📦</div>
+  <h4 class="mt-3">No orders yet</h4>
+  <p class="text-muted">Once you accept a quote, your order will appear here.</p>
+</div>
+
+<div *ngIf="!loading && orders.length > 0">
+  <div class="card border-0 shadow-sm mb-3" *ngFor="let order of orders">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="fs-4">{{ getStatusIcon(order.orderStatus) }}</span>
+            <div>
+              <h5 class="fw-bold mb-0">Order #{{ order.id }}</h5>
+              <small class="text-muted">Quote #{{ order.quoteId }} · {{ order.createdAt | date:'medium' }}</small>
+            </div>
+          </div>
+          <div>
+            <span class="badge bg-{{ getStatusClass(order.orderStatus) }} me-2">{{ order.orderStatus }}</span>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-muted small">Total</div>
+          <div class="fs-5 fw-bold text-primary">{{ order.totalPrice | currency:'TND':'symbol':'1.0-2' }}</div>
+          <div class="text-muted small">Commission: {{ order.commissionAmount | currency:'TND':'symbol':'1.0-2' }}</div>
+        </div>
+        <div class="col-md-3 text-md-end mt-3 mt-md-0">
+          <!-- Buyer: Confirm Delivery when SHIPPED -->
+          <button
+            *ngIf="authService.isBuyer() && order.orderStatus === 'SHIPPED'"
+            class="btn btn-success btn-sm"
+            (click)="confirmDelivery(order.id)">
+            ✓ Confirm Delivery
+          </button>
+
+          <!-- Seller: Mark as Shipped when CONFIRMED -->
+          <button
+            *ngIf="authService.isSeller() && order.orderStatus === 'CONFIRMED'"
+            class="btn btn-primary btn-sm"
+            (click)="markShipped(order.id)">
+            🚚 Mark as Shipped
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mt-3">
+        <div class="progress" style="height: 6px;">
+          <div class="progress-bar bg-{{ getStatusClass(order.orderStatus) }}"
+            [style.width]="
+              order.orderStatus === 'PENDING' ? '20%' :
+              order.orderStatus === 'CONFIRMED' ? '40%' :
+              order.orderStatus === 'SHIPPED' ? '70%' :
+              order.orderStatus === 'DELIVERED' ? '100%' : '0%'
+            ">
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-1">
+          <small class="text-muted">Pending</small>
+          <small class="text-muted">Confirmed</small>
+          <small class="text-muted">Shipped</small>
+          <small class="text-muted">Delivered</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

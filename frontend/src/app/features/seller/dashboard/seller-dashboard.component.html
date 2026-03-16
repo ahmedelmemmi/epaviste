@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">Seller Dashboard</h2>
+  <a routerLink="/seller/rfqs" class="btn btn-primary">Browse Open RFQs</a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm text-center p-3">
+      <div class="display-5 fw-bold text-primary">{{ totalQuotes }}</div>
+      <div class="text-muted">Total Quotes Submitted</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm text-center p-3">
+      <div class="display-5 fw-bold text-warning">{{ pendingQuotes }}</div>
+      <div class="text-muted">Pending Review</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm text-center p-3">
+      <div class="display-5 fw-bold text-success">{{ acceptedQuotes }}</div>
+      <div class="text-muted">Accepted</div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading your quotes...</p>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && quotes.length === 0" class="text-center py-5">
+  <div class="display-1">💬</div>
+  <h4 class="mt-3">No quotes submitted yet</h4>
+  <p class="text-muted">Browse open RFQs and submit your first quote.</p>
+  <a routerLink="/seller/rfqs" class="btn btn-primary mt-2">Browse RFQs</a>
+</div>
+
+<div *ngIf="!loading && quotes.length > 0">
+  <h5 class="fw-bold mb-3">My Submitted Quotes</h5>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>RFQ ID</th>
+          <th>Price</th>
+          <th>Condition</th>
+          <th>Delivery (days)</th>
+          <th>Shipping</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let quote of quotes">
+          <td><a [routerLink]="['/seller/rfqs']">#{{ quote.rfqId }}</a></td>
+          <td class="fw-bold text-primary">{{ quote.price | currency:'TND':'symbol':'1.0-2' }}</td>
+          <td>{{ quote.condition }}</td>
+          <td>{{ quote.deliveryTime }}</td>
+          <td>{{ quote.shippingMethod }}</td>
+          <td><span class="badge bg-{{ getStatusClass(quote.status) }}">{{ quote.status }}</span></td>
+          <td class="small text-muted">{{ quote.createdAt | date:'mediumDate' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="mb-3">
+  <a routerLink="/buyer/dashboard" class="btn btn-outline-secondary btn-sm">← Back to Dashboard</a>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading quotes...</p>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+<div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+<ng-container *ngIf="!loading && rfq">
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h4 class="fw-bold">{{ rfq.partName }}</h4>
+      <p class="text-muted mb-1">
+        {{ rfq.carBrand }} {{ rfq.carModel }} ({{ rfq.carYear }}) | {{ rfq.partCategory }}
+      </p>
+      <p class="text-muted mb-1">Preferred condition: <strong>{{ rfq.preferredCondition }}</strong></p>
+      <p class="text-muted mb-0">📍 {{ rfq.location }}</p>
+    </div>
+  </div>
+
+  <h5 class="fw-bold mb-3">{{ quotes.length }} Quote(s) Received</h5>
+
+  <div *ngIf="quotes.length === 0" class="text-center py-4">
+    <p class="text-muted">No quotes yet. Check back later.</p>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4" *ngFor="let quote of quotes">
+      <div class="card h-100 border-0 shadow-sm"
+        [class.border-success]="quote.status === 'ACCEPTED'"
+        [style.border-width]="quote.status === 'ACCEPTED' ? '2px' : ''"
+        [style.border-style]="quote.status === 'ACCEPTED' ? 'solid' : ''">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>{{ quote.sellerName }}</strong>
+          <span class="badge bg-{{ getStatusClass(quote.status) }}">{{ quote.status }}</span>
+        </div>
+        <div class="card-body">
+          <div class="display-6 text-primary fw-bold mb-2">{{ quote.price | currency:'TND':'symbol':'1.0-2' }}</div>
+          <ul class="list-unstyled text-muted mb-3 small">
+            <li>📦 Condition: <strong>{{ quote.condition }}</strong></li>
+            <li>🚚 Delivery: <strong>{{ quote.deliveryTime }} day(s)</strong></li>
+            <li>🏷️ Shipping: {{ quote.shippingMethod }}</li>
+          </ul>
+          <p class="text-muted small fst-italic">"{{ quote.message }}"</p>
+        </div>
+        <div class="card-footer bg-transparent" *ngIf="quote.status === 'PENDING'">
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm flex-fill" (click)="acceptQuote(quote.id)">
+              ✓ Accept
+            </button>
+            <button class="btn btn-outline-danger btn-sm flex-fill" (click)="rejectQuote(quote.id)">
+              ✗ Reject
+            </button>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent" *ngIf="quote.status === 'ACCEPTED'">
+          <span class="text-success fw-semibold">✓ You accepted this quote</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
