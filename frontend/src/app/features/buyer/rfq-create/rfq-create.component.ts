@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RfqService } from '../../../core/services/rfq.service';
 
 @Component({
+  standalone: false,
   selector: 'app-rfq-create',
   templateUrl: './rfq-create.component.html'
 })

@@ -3,6 +3,7 @@ import { QuoteService } from '../../../core/services/quote.service';
 import { Quote } from '../../../core/models/quote.model';
 
 @Component({
+  standalone: false,
   selector: 'app-seller-dashboard',
   templateUrl: './seller-dashboard.component.html'
 })

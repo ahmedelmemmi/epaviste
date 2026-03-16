@@ -6,6 +6,7 @@ import { RFQ } from '../../../core/models/rfq.model';
 import { Page } from '../../../core/models/page.model';
 
 @Component({
+  standalone: false,
   selector: 'app-rfq-list',
   templateUrl: './rfq-list.component.html'
 })

@@ -6,6 +6,7 @@ import { AuthResponse } from '../../../core/models/user.model';
 import { Notification } from '../../../core/models/notification.model';
 
 @Component({
+  standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html'
 })

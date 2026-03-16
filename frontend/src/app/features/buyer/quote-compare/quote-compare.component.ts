@@ -6,6 +6,7 @@ import { RFQ } from '../../../core/models/rfq.model';
 import { Quote } from '../../../core/models/quote.model';
 
 @Component({
+  standalone: false,
   selector: 'app-quote-compare',
   templateUrl: './quote-compare.component.html'
 })

@@ -4,6 +4,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Order } from '../../../core/models/order.model';
 
 @Component({
+  standalone: false,
   selector: 'app-order-tracking',
   templateUrl: './order-tracking.component.html'
 })

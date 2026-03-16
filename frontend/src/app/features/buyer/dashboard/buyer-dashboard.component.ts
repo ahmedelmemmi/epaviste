@@ -4,6 +4,7 @@ import { RfqService } from '../../../core/services/rfq.service';
 import { RFQ } from '../../../core/models/rfq.model';
 
 @Component({
+  standalone: false,
   selector: 'app-buyer-dashboard',
   templateUrl: './buyer-dashboard.component.html'
 })
