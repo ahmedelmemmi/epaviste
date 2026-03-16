@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: epaviste-db
+    environment:
+      POSTGRES_DB: epaviste
+      POSTGRES_USER: epaviste
+      POSTGRES_PASSWORD: epaviste123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epaviste"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: epaviste-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/epaviste
+      SPRING_DATASOURCE_USERNAME: epaviste
+      SPRING_DATASOURCE_PASSWORD: epaviste123
+      APP_JWT_SECRET: epaviste-secret-key-for-jwt-token-generation-must-be-long-enough
+      APP_CORS_ALLOWED_ORIGINS: http://localhost:4200
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: epaviste-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

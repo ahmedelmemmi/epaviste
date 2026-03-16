@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">My Requests (RFQs)</h2>
+  <a routerLink="/buyer/rfq/new" class="btn btn-danger">
+    + New RFQ
+  </a>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading your RFQs...</p>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && rfqs.length === 0" class="text-center py-5">
+  <div class="display-1">📋</div>
+  <h4 class="mt-3">No requests yet</h4>
+  <p class="text-muted">Post your first part request to start receiving quotes from sellers.</p>
+  <a routerLink="/buyer/rfq/new" class="btn btn-primary mt-2">Post a Request</a>
+</div>
+
+<div class="row g-3" *ngIf="!loading && rfqs.length > 0">
+  <div class="col-md-6 col-lg-4" *ngFor="let rfq of rfqs">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="card-title fw-bold mb-0">{{ rfq.partName }}</h5>
+          <span class="badge bg-{{ getStatusClass(rfq.status) }}">{{ rfq.status }}</span>
+        </div>
+        <p class="text-muted mb-1">
+          <strong>{{ rfq.carBrand }} {{ rfq.carModel }}</strong> ({{ rfq.carYear }})
+        </p>
+        <p class="text-muted mb-1 small">
+          Category: {{ rfq.partCategory }} | Condition: {{ rfq.preferredCondition }}
+        </p>
+        <p class="text-muted mb-2 small">📍 {{ rfq.location }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="badge bg-primary rounded-pill">
+            {{ rfq.quoteCount }} quote(s)
+          </span>
+          <small class="text-muted">{{ rfq.createdAt | date:'mediumDate' }}</small>
+        </div>
+      </div>
+      <div class="card-footer bg-transparent border-0 pt-0">
+        <button class="btn btn-outline-primary btn-sm w-100" (click)="viewQuotes(rfq.id)"
+          [disabled]="rfq.quoteCount === 0">
+          {{ rfq.quoteCount > 0 ? 'Compare ' + rfq.quoteCount + ' Quote(s)' : 'Awaiting Quotes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

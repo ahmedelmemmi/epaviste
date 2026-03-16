@@ -1,0 +1,92 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white py-3">
+        <h4 class="mb-0 fw-bold">🔧 Request a Car Part</h4>
+      </div>
+      <div class="card-body p-4">
+
+        <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+        <form [formGroup]="rfqForm" (ngSubmit)="onSubmit()">
+
+          <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">Vehicle Information</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Brand *</label>
+              <input type="text" class="form-control" formControlName="carBrand" placeholder="e.g. Toyota"
+                [class.is-invalid]="rfqForm.get('carBrand')?.invalid && rfqForm.get('carBrand')?.touched">
+              <div class="invalid-feedback">Car brand is required.</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Model *</label>
+              <input type="text" class="form-control" formControlName="carModel" placeholder="e.g. Corolla"
+                [class.is-invalid]="rfqForm.get('carModel')?.invalid && rfqForm.get('carModel')?.touched">
+              <div class="invalid-feedback">Car model is required.</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Year *</label>
+              <input type="number" class="form-control" formControlName="carYear" placeholder="e.g. 2018"
+                [class.is-invalid]="rfqForm.get('carYear')?.invalid && rfqForm.get('carYear')?.touched">
+              <div class="invalid-feedback">Valid year is required.</div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">VIN (optional)</label>
+              <input type="text" class="form-control" formControlName="vin" placeholder="Vehicle Identification Number">
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">Part Details</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Part Name *</label>
+              <input type="text" class="form-control" formControlName="partName" placeholder="e.g. Front bumper"
+                [class.is-invalid]="rfqForm.get('partName')?.invalid && rfqForm.get('partName')?.touched">
+              <div class="invalid-feedback">Part name is required.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Category *</label>
+              <select class="form-select" formControlName="partCategory"
+                [class.is-invalid]="rfqForm.get('partCategory')?.invalid && rfqForm.get('partCategory')?.touched">
+                <option value="">-- Select Category --</option>
+                <option *ngFor="let cat of partCategories" [value]="cat">{{ cat }}</option>
+              </select>
+              <div class="invalid-feedback">Category is required.</div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Preferred Condition *</label>
+              <div class="d-flex gap-4 mt-1">
+                <div class="form-check" *ngFor="let cond of conditions">
+                  <input class="form-check-input" type="radio" formControlName="preferredCondition"
+                    [value]="cond" [id]="'cond_' + cond">
+                  <label class="form-check-label" [for]="'cond_' + cond">{{ cond }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Description *</label>
+              <textarea class="form-control" formControlName="description" rows="3"
+                placeholder="Describe the part you need, any damage details, etc."
+                [class.is-invalid]="rfqForm.get('description')?.invalid && rfqForm.get('description')?.touched"></textarea>
+              <div class="invalid-feedback">Description is required.</div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Your Location *</label>
+              <input type="text" class="form-control" formControlName="location" placeholder="e.g. Tunis, Sfax"
+                [class.is-invalid]="rfqForm.get('location')?.invalid && rfqForm.get('location')?.touched">
+              <div class="invalid-feedback">Location is required.</div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4" [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Submitting...' : 'Submit Request' }}
+            </button>
+            <a routerLink="/buyer/dashboard" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

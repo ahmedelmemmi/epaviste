@@ -1,0 +1,58 @@
+<div class="hero-section bg-primary text-white py-5 rounded-3 mb-5">
+  <div class="container text-center py-4">
+    <h1 class="display-4 fw-bold mb-3">
+      Find Car Parts <span class="text-danger">Faster</span>
+    </h1>
+    <p class="lead mb-4">
+      Tunisia's marketplace connecting car owners with trusted parts sellers.
+      Post your request, compare quotes, and get the best deal — fast.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a routerLink="/buyer/rfq/new" class="btn btn-danger btn-lg px-4">
+        🔧 I need a part
+      </a>
+      <a routerLink="/auth/register" [queryParams]="{role: 'SELLER'}" class="btn btn-outline-light btn-lg px-4">
+        🏪 I'm a seller
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <h2 class="text-center mb-4 fw-bold">How It Works</h2>
+  <div class="row g-4 mb-5">
+    <div class="col-md-4 text-center">
+      <div class="card h-100 border-0 shadow-sm p-4">
+        <div class="display-1 mb-3">📋</div>
+        <h4 class="fw-bold">1. Post a Request</h4>
+        <p class="text-muted">Describe the car part you need — brand, model, year, part name and condition preference.</p>
+      </div>
+    </div>
+    <div class="col-md-4 text-center">
+      <div class="card h-100 border-0 shadow-sm p-4">
+        <div class="display-1 mb-3">💬</div>
+        <h4 class="fw-bold">2. Receive Quotes</h4>
+        <p class="text-muted">Multiple sellers will respond with their best prices, delivery times, and conditions.</p>
+      </div>
+    </div>
+    <div class="col-md-4 text-center">
+      <div class="card h-100 border-0 shadow-sm p-4">
+        <div class="display-1 mb-3">✅</div>
+        <h4 class="fw-bold">3. Accept & Order</h4>
+        <p class="text-muted">Compare all quotes side by side and accept the best one. Track your order to delivery.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-md-6 offset-md-3 text-center">
+      <h3 class="fw-bold mb-3">Why epaviste.tn?</h3>
+      <ul class="list-unstyled text-start">
+        <li class="mb-2">✔ Access hundreds of verified car parts sellers</li>
+        <li class="mb-2">✔ Compare prices & conditions in one place</li>
+        <li class="mb-2">✔ Secure transactions with delivery tracking</li>
+        <li class="mb-2">✔ Seller ratings & reviews for trust</li>
+      </ul>
+    </div>
+  </div>
+</div>
