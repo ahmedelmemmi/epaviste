@@ -11,7 +11,7 @@ export interface AuthResponse {
   userId: number;
   name: string;
   email: string;
-  role: string;
+  role: 'BUYER' | 'SELLER' | 'ADMIN';
 }
 
 export interface LoginRequest {

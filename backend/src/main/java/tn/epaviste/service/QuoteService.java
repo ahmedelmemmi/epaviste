@@ -1,6 +1,7 @@
 package tn.epaviste.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.epaviste.dto.request.QuoteRequest;
@@ -18,6 +19,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuoteService {
+
+    @Value("${app.commission.rate:0.10}")
+    private double commissionRate;
 
     private final QuoteRepository quoteRepository;
     private final RFQRepository rfqRepository;
@@ -102,8 +106,8 @@ public class QuoteService {
         rfq.setStatus(RFQStatus.CLOSED);
         rfqRepository.save(rfq);
 
-        // Create order with 10% commission
-        BigDecimal commission = quote.getPrice().multiply(BigDecimal.valueOf(0.10));
+        // Create order with configurable commission
+        BigDecimal commission = quote.getPrice().multiply(BigDecimal.valueOf(commissionRate));
         Order order = Order.builder()
                 .buyer(buyer)
                 .seller(quote.getSeller())

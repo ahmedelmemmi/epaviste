@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RfqService } from '../../../core/services/rfq.service';
 import { QuoteService } from '../../../core/services/quote.service';
 import { RFQ } from '../../../core/models/rfq.model';
+import { Page } from '../../../core/models/page.model';
 
 @Component({
   selector: 'app-rfq-list',
@@ -34,13 +35,9 @@ export class RfqListComponent implements OnInit {
   loadRFQs(): void {
     this.loading = true;
     this.rfqService.getOpenRFQs(this.currentPage, this.pageSize).subscribe({
-      next: (data) => {
-        if (data.content) {
-          this.rfqs = data.content;
-          this.totalPages = data.totalPages || 1;
-        } else {
-          this.rfqs = Array.isArray(data) ? data : [];
-        }
+      next: (data: Page<RFQ>) => {
+        this.rfqs = data.content;
+        this.totalPages = data.totalPages || 1;
         this.loading = false;
       },
       error: () => {

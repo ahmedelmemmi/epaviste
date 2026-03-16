@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RFQ, RFQRequest } from '../models/rfq.model';
+import { Page } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
 export class RfqService {
@@ -13,9 +14,9 @@ export class RfqService {
     return this.http.post<RFQ>(this.apiUrl, request);
   }
 
-  getOpenRFQs(page = 0, size = 10): Observable<any> {
+  getOpenRFQs(page = 0, size = 10): Observable<Page<RFQ>> {
     const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<any>(this.apiUrl, { params });
+    return this.http.get<Page<RFQ>>(this.apiUrl, { params });
   }
 
   getMyRFQs(): Observable<RFQ[]> {

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Date;
 
@@ -22,14 +23,17 @@ public class JwtTokenProvider {
     @Value("${app.jwt.expiration}")
     private long jwtExpiration;
 
-    private Key getSigningKey() {
-        // Ensure the secret is encoded to at least 256 bits for HS256
-        byte[] keyBytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
-        if (keyBytes.length < 32) {
-            byte[] paddedKey = new byte[32];
-            System.arraycopy(keyBytes, 0, paddedKey, 0, keyBytes.length);
-            return Keys.hmacShaKeyFor(paddedKey);
+    @PostConstruct
+    public void validateSecret() {
+        if (jwtSecret == null || jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException(
+                "JWT secret must be at least 32 bytes long. " +
+                "Please set the APP_JWT_SECRET environment variable to a sufficiently long value.");
         }
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
