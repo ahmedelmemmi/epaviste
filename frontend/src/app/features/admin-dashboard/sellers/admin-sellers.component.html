@@ -1,0 +1,50 @@
+<div>
+  <h4 class="mb-4">🏪 Seller Verification</h4>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <div *ngIf="!loading" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let seller of sellers">
+            <td>{{ seller.userId }}</td>
+            <td>{{ seller.name }}</td>
+            <td>{{ seller.email }}</td>
+            <td>{{ seller.companyName || '—' }}</td>
+            <td>{{ seller.rating | number:'1.1-1' }}</td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-outline-success" (click)="approve(seller)">✅ Approve</button>
+                <button class="btn btn-outline-danger" (click)="reject(seller)">❌ Reject</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="sellers.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">No pending verification requests.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="totalPages > 1">
+      <button class="btn btn-sm btn-outline-secondary" (click)="prevPage()" [disabled]="currentPage === 0">← Prev</button>
+      <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next →</button>
+    </div>
+  </div>
+</div>

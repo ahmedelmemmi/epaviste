@@ -1,0 +1,73 @@
+<div>
+  <h4 class="mb-4">⚖️ Dispute Resolution</h4>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- Resolve Modal -->
+  <div *ngIf="selectedDisputeId !== null" class="card border-warning shadow mb-4">
+    <div class="card-header bg-warning">Resolve Dispute #{{ selectedDisputeId }}</div>
+    <div class="card-body">
+      <textarea class="form-control mb-2" rows="3" placeholder="Enter resolution notes…"
+                [(ngModel)]="resolutionText"></textarea>
+      <div class="d-flex gap-2">
+        <button class="btn btn-success" (click)="submitResolution()" [disabled]="!resolutionText.trim()">
+          ✅ Submit Resolution
+        </button>
+        <button class="btn btn-outline-secondary" (click)="selectedDisputeId = null">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <div *ngIf="!loading" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Order</th>
+            <th>Complainant</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dispute of disputes">
+            <td>{{ dispute.id }}</td>
+            <td>#{{ dispute.orderId }}</td>
+            <td>{{ dispute.complainantName }}</td>
+            <td>{{ dispute.reason | slice:0:50 }}{{ dispute.reason.length > 50 ? '…' : '' }}</td>
+            <td>
+              <span class="badge"
+                    [class.bg-danger]="dispute.status === 'OPEN'"
+                    [class.bg-success]="dispute.status === 'RESOLVED'"
+                    [class.bg-secondary]="dispute.status === 'CLOSED'">
+                {{ dispute.status }}
+              </span>
+            </td>
+            <td>{{ dispute.createdAt | date:'mediumDate' }}</td>
+            <td>
+              <button *ngIf="dispute.status === 'OPEN'"
+                      class="btn btn-sm btn-outline-primary"
+                      (click)="openResolveModal(dispute.id)">⚖️ Resolve</button>
+            </td>
+          </tr>
+          <tr *ngIf="disputes.length === 0">
+            <td colspan="7" class="text-center text-muted py-4">No disputes found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="totalPages > 1">
+      <button class="btn btn-sm btn-outline-secondary" (click)="prevPage()" [disabled]="currentPage === 0">← Prev</button>
+      <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next →</button>
+    </div>
+  </div>
+</div>

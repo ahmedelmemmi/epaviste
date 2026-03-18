@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import tn.epaviste.enums.UserRole;
+import tn.epaviste.enums.UserStatus;
 
 import java.time.LocalDateTime;
 
@@ -35,6 +36,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
     private LocalDateTime createdAt;
 
