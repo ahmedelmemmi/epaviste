@@ -30,6 +30,10 @@ const routes: Routes = [
     canActivate: [AuthGuard, SellerGuard]
   },
   {
+    path: 'admin-login',
+    loadChildren: () => import('./features/admin-login/admin-login.module').then(m => m.AdminLoginModule)
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./features/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
     canActivate: [AuthGuard, AdminGuard]
