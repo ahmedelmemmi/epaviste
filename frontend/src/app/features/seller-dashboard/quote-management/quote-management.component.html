@@ -1,0 +1,111 @@
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage=''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger alert-dismissible">
+  {{ errorMessage }}
+  <button type="button" class="btn-close" (click)="errorMessage=''"></button>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading your quotes...</p>
+</div>
+
+<div *ngIf="!loading && quotes.length === 0" class="text-center py-5">
+  <div class="display-1">💬</div>
+  <h5 class="mt-3">No quotes submitted yet</h5>
+  <p class="text-muted">Browse open RFQs and submit your first quote.</p>
+  <a routerLink="/seller-dashboard/rfqs" class="btn btn-primary mt-2">Browse RFQs</a>
+</div>
+
+<div *ngIf="!loading && quotes.length > 0">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>RFQ ID</th>
+          <th>Price</th>
+          <th>Condition</th>
+          <th>Delivery (days)</th>
+          <th>Shipping</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let quote of quotes">
+          <tr>
+            <td>#{{ quote.rfqId }}</td>
+            <td class="fw-bold text-primary">{{ quote.price | currency:'TND':'symbol':'1.0-2' }}</td>
+            <td>{{ quote.condition }}</td>
+            <td>{{ quote.deliveryTime }}</td>
+            <td>{{ quote.shippingMethod }}</td>
+            <td><span class="badge bg-{{ getStatusClass(quote.status) }}">{{ quote.status }}</span></td>
+            <td class="small text-muted">{{ quote.createdAt | date:'mediumDate' }}</td>
+            <td>
+              <div class="d-flex gap-1" *ngIf="quote.status === 'PENDING'">
+                <button class="btn btn-outline-primary btn-sm" (click)="openEditForm(quote)" title="Edit">
+                  ✏️
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="withdrawQuote(quote.id)" title="Withdraw">
+                  🗑️
+                </button>
+              </div>
+              <span *ngIf="quote.status !== 'PENDING'" class="text-muted small">—</span>
+            </td>
+          </tr>
+          <!-- Edit Form Row -->
+          <tr *ngIf="editingQuoteId === quote.id">
+            <td colspan="8" class="bg-light p-3">
+              <h6 class="fw-bold mb-3">Edit Quote #{{ quote.id }}</h6>
+              <div *ngIf="editError" class="alert alert-danger py-2 small">{{ editError }}</div>
+              <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+                <div class="row g-2">
+                  <div class="col-md-2">
+                    <label class="form-label form-label-sm fw-semibold">Price (TND)</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="price"
+                           [class.is-invalid]="editForm.get('price')?.invalid && editForm.get('price')?.touched">
+                    <div class="invalid-feedback">Required.</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label form-label-sm fw-semibold">Condition</label>
+                    <select class="form-select form-select-sm" formControlName="condition">
+                      <option *ngFor="let c of conditions" [value]="c">{{ c }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label form-label-sm fw-semibold">Delivery (days)</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="deliveryTime"
+                           [class.is-invalid]="editForm.get('deliveryTime')?.invalid && editForm.get('deliveryTime')?.touched">
+                    <div class="invalid-feedback">Required.</div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label form-label-sm fw-semibold">Shipping</label>
+                    <select class="form-select form-select-sm" formControlName="shippingMethod">
+                      <option *ngFor="let s of shippingMethods" [value]="s">{{ s }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label form-label-sm fw-semibold">Message</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="message"
+                           [class.is-invalid]="editForm.get('message')?.invalid && editForm.get('message')?.touched">
+                    <div class="invalid-feedback">Required.</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-2">
+                  <button type="submit" class="btn btn-success btn-sm" [disabled]="editLoading">
+                    <span *ngIf="editLoading" class="spinner-border spinner-border-sm me-1"></span>
+                    Save Changes
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeEditForm()">Cancel</button>
+                </div>
+              </form>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

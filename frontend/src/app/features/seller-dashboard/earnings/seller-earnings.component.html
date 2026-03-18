@@ -1,0 +1,81 @@
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && earnings">
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="fs-3 fw-bold text-success">{{ earnings.totalEarnings | currency:'TND':'symbol':'1.0-2' }}</div>
+        <div class="text-muted small mt-1">Total Earnings</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="fs-3 fw-bold text-danger">{{ earnings.totalCommission | currency:'TND':'symbol':'1.0-2' }}</div>
+        <div class="text-muted small mt-1">Platform Commission</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="fs-3 fw-bold text-primary">{{ earnings.netEarnings | currency:'TND':'symbol':'1.0-2' }}</div>
+        <div class="text-muted small mt-1">Net Earnings</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="fs-3 fw-bold text-warning">{{ earnings.pendingPayouts | currency:'TND':'symbol':'1.0-2' }}</div>
+        <div class="text-muted small mt-1">Pending Payouts</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commission Info -->
+  <div class="alert alert-info d-flex align-items-start gap-2 mb-4">
+    <span>ℹ️</span>
+    <div>
+      <strong>Commission Breakdown:</strong> The platform charges a commission on each completed order.
+      Your net earnings = Total Earnings − Commission.
+    </div>
+  </div>
+
+  <!-- Payment History -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold">Payment History</div>
+    <div class="card-body p-0">
+      <div *ngIf="earnings.paymentHistory.length === 0" class="p-3 text-center text-muted">
+        No payment records yet.
+      </div>
+      <div class="table-responsive" *ngIf="earnings.paymentHistory.length > 0">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Payment ID</th>
+              <th>Order ID</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Escrow Released</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of earnings.paymentHistory">
+              <td>#{{ p.id }}</td>
+              <td>#{{ p.orderId }}</td>
+              <td>{{ p.paymentMethod || '—' }}</td>
+              <td><span class="badge bg-{{ getPaymentStatusClass(p.paymentStatus) }}">{{ p.paymentStatus }}</span></td>
+              <td>
+                <span *ngIf="p.escrowReleased" class="badge bg-success">Released</span>
+                <span *ngIf="!p.escrowReleased" class="badge bg-secondary">Held</span>
+              </td>
+              <td class="small text-muted">{{ p.createdAt | date:'mediumDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

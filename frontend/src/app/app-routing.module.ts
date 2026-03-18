@@ -19,6 +19,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, SellerGuard]
   },
   {
+    path: 'seller-dashboard',
+    loadChildren: () => import('./features/seller-dashboard/seller-dashboard.module').then(m => m.SellerDashboardModule),
+    canActivate: [AuthGuard, SellerGuard]
+  },
+  {
     path: 'orders',
     loadChildren: () => import('./features/orders/orders.module').then(m => m.OrdersModule),
     canActivate: [AuthGuard]

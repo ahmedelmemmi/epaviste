@@ -16,6 +16,9 @@
           <a class="nav-link" routerLink="/buyer/rfq/new" routerLinkActive="active">New RFQ</a>
         </li>
         <li class="nav-item" *ngIf="currentUser?.role === 'SELLER'">
+          <a class="nav-link" routerLink="/seller-dashboard" routerLinkActive="active">Seller Dashboard</a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser?.role === 'SELLER'">
           <a class="nav-link" routerLink="/seller/rfqs" routerLinkActive="active">Browse RFQs</a>
         </li>
         <li class="nav-item" *ngIf="currentUser?.role === 'SELLER'">

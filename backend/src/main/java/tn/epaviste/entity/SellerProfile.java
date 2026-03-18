@@ -24,6 +24,15 @@ public class SellerProfile {
 
     private String address;
 
+    private String description;
+
+    private String deliveryZones;
+
+    private String shippingMethods;
+
+    @Builder.Default
+    private Boolean messagingEnabled = false;
+
     @Builder.Default
     private Double rating = 0.0;
 

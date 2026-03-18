@@ -6,10 +6,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import tn.epaviste.dto.request.UpdateOrderStatusRequest;
 import tn.epaviste.dto.response.OrderResponse;
 import tn.epaviste.service.OrderService;
 
@@ -22,6 +24,15 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @Operation(summary = "Update order status", description = "Seller updates order/shipping status")
+    @PutMapping("/{id}/status")
+    public ResponseEntity<OrderResponse> updateOrderStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateOrderStatusRequest request,
+            Authentication authentication) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, request.getStatus(), authentication.getName()));
+    }
 
     @Operation(summary = "Get my orders",
             description = "Returns all orders for the authenticated user (buyer or seller)")

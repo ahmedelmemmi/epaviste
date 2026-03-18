@@ -69,6 +69,18 @@ public class OrderService {
         return toResponse(orderRepository.save(order));
     }
 
+    @Transactional
+    public OrderResponse updateOrderStatus(Long id, OrderStatus status, String email) {
+        User seller = getUserByEmail(email);
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+        if (!order.getSeller().getId().equals(seller.getId())) {
+            throw new UnauthorizedException("Only the seller can update order status");
+        }
+        order.setOrderStatus(status);
+        return toResponse(orderRepository.save(order));
+    }
+
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
