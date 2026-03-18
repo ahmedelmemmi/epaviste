@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Quote, QuoteRequest } from '../models/quote.model';
+import { Quote, QuoteRequest, UpdateQuoteRequest } from '../models/quote.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuoteService {
@@ -27,5 +27,13 @@ export class QuoteService {
 
   rejectQuote(id: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}/reject`, {});
+  }
+
+  updateQuote(id: number, request: UpdateQuoteRequest): Observable<Quote> {
+    return this.http.put<Quote>(`${this.apiUrl}/${id}`, request);
+  }
+
+  withdrawQuote(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

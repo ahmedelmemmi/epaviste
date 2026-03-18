@@ -1,0 +1,92 @@
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading dashboard...</p>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && stats">
+  <div class="row g-4 mb-4">
+    <div class="col-md-4 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-primary">{{ stats.totalRFQsReceived }}</div>
+        <div class="text-muted small mt-1">RFQs Received</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-warning">{{ stats.activeQuotes }}</div>
+        <div class="text-muted small mt-1">Active Quotes</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-2">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-info">{{ stats.ordersInProgress }}</div>
+        <div class="text-muted small mt-1">Orders in Progress</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-success">{{ stats.totalRevenue | currency:'TND':'symbol':'1.0-2' }}</div>
+        <div class="text-muted small mt-1">Total Revenue</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-warning">
+          <span class="text-warning">★</span> {{ stats.rating | number:'1.1-1' }}
+        </div>
+        <div class="text-muted small mt-1">Seller Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold">Latest Notifications</div>
+    <div class="card-body p-0">
+      <div *ngIf="stats.recentNotifications.length === 0" class="p-3 text-muted text-center">
+        No notifications yet.
+      </div>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let n of stats.recentNotifications" class="list-group-item d-flex justify-content-between align-items-start">
+          <div>
+            <span class="badge bg-secondary me-2">{{ n.type }}</span>
+            {{ n.message }}
+          </div>
+          <small class="text-muted text-nowrap ms-2">{{ n.createdAt | date:'shortDate' }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-4 g-3">
+    <div class="col-md-3">
+      <a routerLink="/seller-dashboard/rfqs" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">📋</div>
+        <div class="fw-bold">Browse RFQs</div>
+        <small class="text-muted">Find requests for quotes</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/seller-dashboard/quotes" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">💬</div>
+        <div class="fw-bold">My Quotes</div>
+        <small class="text-muted">Manage submitted quotes</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/seller-dashboard/orders" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">📦</div>
+        <div class="fw-bold">My Orders</div>
+        <small class="text-muted">Track and manage orders</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/seller-dashboard/earnings" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">💰</div>
+        <div class="fw-bold">Earnings</div>
+        <small class="text-muted">Revenue and payouts</small>
+      </a>
+    </div>
+  </div>
+</div>

@@ -21,3 +21,11 @@ export interface QuoteRequest {
   shippingMethod: string;
   message: string;
 }
+
+export interface UpdateQuoteRequest {
+  price: number;
+  condition: string;
+  deliveryTime: number;
+  shippingMethod: string;
+  message: string;
+}

@@ -24,4 +24,8 @@ export class OrderService {
   markShipped(id: number): Observable<Order> {
     return this.http.put<Order>(`${this.apiUrl}/${id}/ship`, {});
   }
+
+  updateOrderStatus(id: number, status: string): Observable<Order> {
+    return this.http.put<Order>(`${this.apiUrl}/${id}/status`, { status });
+  }
 }

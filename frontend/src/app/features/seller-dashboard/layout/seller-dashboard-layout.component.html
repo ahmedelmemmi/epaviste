@@ -1,0 +1,36 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-2">
+          <nav class="nav flex-column">
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/overview" routerLinkActive="active bg-primary text-white">
+              📊 Overview
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/rfqs" routerLinkActive="active bg-primary text-white">
+              📋 RFQ Management
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/quotes" routerLinkActive="active bg-primary text-white">
+              💬 My Quotes
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/orders" routerLinkActive="active bg-primary text-white">
+              📦 Orders
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/earnings" routerLinkActive="active bg-primary text-white">
+              💰 Earnings
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/seller-dashboard/settings" routerLinkActive="active bg-primary text-white">
+              ⚙️ Settings
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
