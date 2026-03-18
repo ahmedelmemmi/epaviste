@@ -23,6 +23,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PaymentService paymentService;
+    private final NotificationService notificationService;
 
     public List<OrderResponse> getMyOrders(String email) {
         User user = getUserByEmail(email);
@@ -51,9 +52,16 @@ public class OrderService {
         if (!order.getBuyer().getId().equals(buyer.getId())) {
             throw new UnauthorizedException("Only the buyer can confirm delivery");
         }
+        if (order.getOrderStatus() != OrderStatus.SHIPPED) {
+            throw new IllegalStateException("Only shipped orders can be confirmed as delivered");
+        }
         order.setOrderStatus(OrderStatus.DELIVERED);
         Order saved = orderRepository.save(order);
         paymentService.releaseEscrow(saved.getId());
+        notificationService.createNotification(
+                order.getSeller(), "ORDER_DELIVERED",
+                "Order #" + order.getId() + " has been confirmed as delivered. Payment will be released."
+        );
         return toResponse(saved);
     }
 
@@ -65,8 +73,16 @@ public class OrderService {
         if (!order.getSeller().getId().equals(seller.getId())) {
             throw new UnauthorizedException("Only the seller can mark as shipped");
         }
+        if (order.getOrderStatus() != OrderStatus.PENDING && order.getOrderStatus() != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException("Only pending or confirmed orders can be marked as shipped");
+        }
         order.setOrderStatus(OrderStatus.SHIPPED);
-        return toResponse(orderRepository.save(order));
+        Order saved = orderRepository.save(order);
+        notificationService.createNotification(
+                order.getBuyer(), "ORDER_SHIPPED",
+                "Your order #" + order.getId() + " has been shipped! Please confirm receipt once you receive it."
+        );
+        return toResponse(saved);
     }
 
     @Transactional
@@ -78,7 +94,38 @@ public class OrderService {
             throw new UnauthorizedException("Only the seller can update order status");
         }
         order.setOrderStatus(status);
-        return toResponse(orderRepository.save(order));
+        Order saved = orderRepository.save(order);
+        if (status == OrderStatus.CONFIRMED) {
+            notificationService.createNotification(
+                    order.getBuyer(), "ORDER_CONFIRMED",
+                    "Your order #" + order.getId() + " has been confirmed by the seller and is being prepared for shipment."
+            );
+        }
+        return toResponse(saved);
+    }
+
+    @Transactional
+    public OrderResponse cancelOrder(Long id, String email) {
+        User user = getUserByEmail(email);
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+        boolean isBuyer = order.getBuyer().getId().equals(user.getId());
+        boolean isSeller = order.getSeller().getId().equals(user.getId());
+        if (!isBuyer && !isSeller) {
+            throw new UnauthorizedException("You do not have access to this order");
+        }
+        if (order.getOrderStatus() != OrderStatus.PENDING) {
+            throw new IllegalStateException("Only pending orders can be cancelled");
+        }
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        Order saved = orderRepository.save(order);
+        User otherParty = isBuyer ? order.getSeller() : order.getBuyer();
+        String cancelledBy = isBuyer ? "buyer" : "seller";
+        notificationService.createNotification(
+                otherParty, "ORDER_CANCELLED",
+                "Order #" + order.getId() + " has been cancelled by the " + cancelledBy + "."
+        );
+        return toResponse(saved);
     }
 
     private User getUserByEmail(String email) {

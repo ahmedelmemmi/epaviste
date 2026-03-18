@@ -72,4 +72,17 @@ export class OrdersManagementComponent implements OnInit {
       }
     });
   }
+
+  cancelOrder(orderId: number): void {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    this.orderService.cancelOrder(orderId).subscribe({
+      next: () => {
+        this.successMessage = 'Order has been cancelled.';
+        this.loadOrders();
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Failed to cancel order.';
+      }
+    });
+  }
 }

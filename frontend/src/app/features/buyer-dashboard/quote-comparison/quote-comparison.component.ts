@@ -68,9 +68,8 @@ export class BuyerQuoteComparisonComponent implements OnInit {
     this.errorMessage = '';
     this.quoteService.acceptQuote(quoteId).subscribe({
       next: () => {
-        this.successMessage = 'Quote accepted! An order has been created.';
         this.acceptingId = null;
-        if (this.selectedRFQ) this.selectRFQ(this.selectedRFQ);
+        this.router.navigate(['/buyer-dashboard/orders'], { queryParams: { orderCreated: 'true' } });
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Failed to accept quote.';
