@@ -28,6 +28,7 @@ public class SellerService {
     private final NotificationRepository notificationRepository;
     private final RFQRepository rfqRepository;
     private final NotificationService notificationService;
+    private final ReviewRepository reviewRepository;
 
     public SellerStatsResponse getStats(String email) {
         User seller = getSellerByEmail(email);
@@ -108,6 +109,21 @@ public class SellerService {
         SellerProfile profile = sellerProfileRepository.findByUser(seller)
                 .orElse(SellerProfile.builder().user(seller).build());
         return toProfileResponse(seller, profile);
+    }
+
+    public SellerPublicProfileResponse getPublicProfile(Long sellerId) {
+        SellerProfile profile = sellerProfileRepository.findById(sellerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller profile not found with id: " + sellerId));
+        Long reviewCount = reviewRepository.countByOrderSellerId(sellerId);
+        return SellerPublicProfileResponse.builder()
+                .sellerId(profile.getId())
+                .name(profile.getUser().getName())
+                .companyName(profile.getCompanyName())
+                .verified(profile.getVerified())
+                .rating(profile.getRating())
+                .reviewCount(reviewCount)
+                .deliveryZones(profile.getDeliveryZones())
+                .build();
     }
 
     @Transactional

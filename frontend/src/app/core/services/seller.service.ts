@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SellerStats, SellerEarnings, SellerProfile, SellerProfileRequest } from '../models/seller.model';
+import { SellerStats, SellerEarnings, SellerProfile, SellerProfileRequest, SellerPublicProfile } from '../models/seller.model';
 import { RFQ } from '../models/rfq.model';
 import { Page } from '../models/page.model';
 
@@ -42,5 +42,9 @@ export class SellerService {
     if (partCategory) params = params.set('partCategory', partCategory);
     if (location) params = params.set('location', location);
     return this.http.get<Page<RFQ>>(`${this.apiUrl}/rfqs`, { params });
+  }
+
+  getSellerPublicProfile(sellerId: number): Observable<SellerPublicProfile> {
+    return this.http.get<SellerPublicProfile>(`${this.apiUrl}/${sellerId}/public-profile`);
   }
 }
