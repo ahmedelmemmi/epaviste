@@ -104,6 +104,7 @@ public class SellerService {
 
     public SellerProfileResponse getProfile(String email) {
         User seller = getSellerByEmail(email);
+        // Use existing profile or build a transient default for display; profile is persisted only on update
         SellerProfile profile = sellerProfileRepository.findByUser(seller)
                 .orElse(SellerProfile.builder().user(seller).build());
         return toProfileResponse(seller, profile);
