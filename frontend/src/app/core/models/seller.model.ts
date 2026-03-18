@@ -50,3 +50,13 @@ export interface SellerProfileRequest {
   deliveryZones: string;
   shippingMethods: string;
 }
+
+export interface SellerPublicProfile {
+  sellerId: number;
+  name: string;
+  companyName: string;
+  verified: boolean;
+  rating: number;
+  reviewCount: number;
+  deliveryZones: string;
+}

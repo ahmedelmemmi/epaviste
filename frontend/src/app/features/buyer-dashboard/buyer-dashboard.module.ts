@@ -11,6 +11,7 @@ import { BuyerOrdersComponent } from './orders/buyer-orders.component';
 import { BuyerReviewsComponent } from './reviews/buyer-reviews.component';
 import { BuyerNotificationsComponent } from './notifications/buyer-notifications.component';
 import { BuyerSettingsComponent } from './settings/buyer-settings.component';
+import { SellerProfileCardComponent } from './seller-profile-card/seller-profile-card.component';
 
 const routes: Routes = [
   {
@@ -38,7 +39,8 @@ const routes: Routes = [
     BuyerOrdersComponent,
     BuyerReviewsComponent,
     BuyerNotificationsComponent,
-    BuyerSettingsComponent
+    BuyerSettingsComponent,
+    SellerProfileCardComponent
   ],
   imports: [
     CommonModule,

@@ -49,6 +49,12 @@ public class SellerController {
         return ResponseEntity.ok(sellerService.updateProfile(authentication.getName(), request));
     }
 
+    @Operation(summary = "Get seller public profile (no authentication required)")
+    @GetMapping("/{sellerId}/public-profile")
+    public ResponseEntity<SellerPublicProfileResponse> getPublicProfile(@PathVariable Long sellerId) {
+        return ResponseEntity.ok(sellerService.getPublicProfile(sellerId));
+    }
+
     @Operation(summary = "Get open RFQs for sellers with optional filters")
     @GetMapping("/rfqs")
     public ResponseEntity<Page<RFQResponse>> getSellerRFQs(
