@@ -83,4 +83,18 @@ public class OrderController {
             Authentication authentication) {
         return ResponseEntity.ok(orderService.markShipped(id, authentication.getName()));
     }
+
+    @Operation(summary = "Cancel order",
+            description = "Buyer or seller cancels a pending order")
+    @ApiResponse(responseCode = "200", description = "Order cancelled",
+            content = @Content(schema = @Schema(implementation = OrderResponse.class)))
+    @ApiResponse(responseCode = "401", description = "Not authenticated")
+    @ApiResponse(responseCode = "403", description = "Not authorized to cancel this order")
+    @ApiResponse(responseCode = "404", description = "Order not found")
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<OrderResponse> cancelOrder(
+            @Parameter(description = "Order ID") @PathVariable Long id,
+            Authentication authentication) {
+        return ResponseEntity.ok(orderService.cancelOrder(id, authentication.getName()));
+    }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../../core/services/order.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Order } from '../../../core/models/order.model';
@@ -19,13 +19,18 @@ export class BuyerOrdersComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     const user = this.authService.currentUser;
     this.currentUserId = user ? user.userId : null;
     this.loadOrders();
+    if (this.route.snapshot.queryParamMap.get('orderCreated') === 'true') {
+      this.successMessage = 'Quote accepted! Your order has been created. The seller will confirm and ship your part soon.';
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+    }
   }
 
   loadOrders(): void {
@@ -53,6 +58,31 @@ export class BuyerOrdersComponent implements OnInit {
         this.errorMessage = err.error?.message || 'Failed to confirm delivery.';
       }
     });
+  }
+
+  cancelOrder(orderId: number): void {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    this.orderService.cancelOrder(orderId).subscribe({
+      next: () => {
+        this.successMessage = 'Order has been cancelled.';
+        this.loadOrders();
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Failed to cancel order.';
+      }
+    });
+  }
+
+  getStatusDescription(status: string): string {
+    const descriptions: Record<string, string> = {
+      PENDING: 'Waiting for seller to confirm',
+      CONFIRMED: 'Seller confirmed – preparing for shipment',
+      SHIPPED: 'In transit – please confirm receipt when delivered',
+      DELIVERED: 'Delivered',
+      CANCELLED: 'Cancelled',
+      DISPUTED: 'Disputed'
+    };
+    return descriptions[status] || status;
   }
 
   leaveReview(orderId: number): void {

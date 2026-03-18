@@ -42,15 +42,20 @@
         <td class="small text-muted">{{ order.createdAt | date:'mediumDate' }}</td>
         <td>
           <div class="d-flex gap-1 flex-wrap">
+            <button *ngIf="order.orderStatus === 'PENDING'"
+                    class="btn btn-outline-info btn-sm"
+                    (click)="updateStatus(order.id, 'CONFIRMED')">
+              Confirm
+            </button>
             <button *ngIf="order.orderStatus === 'PENDING' || order.orderStatus === 'CONFIRMED'"
                     class="btn btn-primary btn-sm"
                     (click)="markShipped(order.id)">
               Mark Shipped
             </button>
             <button *ngIf="order.orderStatus === 'PENDING'"
-                    class="btn btn-outline-info btn-sm"
-                    (click)="updateStatus(order.id, 'CONFIRMED')">
-              Confirm
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="cancelOrder(order.id)">
+              Cancel
             </button>
           </div>
           <span *ngIf="order.orderStatus === 'SHIPPED' || order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED'"

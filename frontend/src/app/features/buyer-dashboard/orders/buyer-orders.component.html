@@ -36,15 +36,26 @@
               <td class="fw-semibold">#{{ order.id }}</td>
               <td>{{ order.sellerName }}</td>
               <td class="fw-bold text-success">{{ order.totalPrice | currency:'TND':'symbol':'1.0-2' }}</td>
-              <td><span class="badge bg-{{ getStatusClass(order.orderStatus) }}">{{ order.orderStatus }}</span></td>
+              <td>
+                <span class="badge bg-{{ getStatusClass(order.orderStatus) }}">{{ order.orderStatus }}</span>
+                <div class="small text-muted mt-1">{{ getStatusDescription(order.orderStatus) }}</div>
+              </td>
               <td>{{ order.createdAt | date:'mediumDate' }}</td>
               <td>
-                <button
-                  *ngIf="order.orderStatus === 'SHIPPED'"
-                  class="btn btn-sm btn-success"
-                  (click)="confirmDelivery(order.id)">
-                  Confirm Receipt
-                </button>
+                <div class="d-flex gap-1 flex-wrap">
+                  <button
+                    *ngIf="order.orderStatus === 'SHIPPED'"
+                    class="btn btn-sm btn-success"
+                    (click)="confirmDelivery(order.id)">
+                    Confirm Receipt
+                  </button>
+                  <button
+                    *ngIf="order.orderStatus === 'PENDING'"
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="cancelOrder(order.id)">
+                    Cancel
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
