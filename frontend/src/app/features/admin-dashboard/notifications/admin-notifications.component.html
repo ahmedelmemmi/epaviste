@@ -1,0 +1,35 @@
+<div>
+  <h4 class="mb-4">🔔 Notifications &amp; Announcements</h4>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div class="card border-0 shadow-sm" style="max-width:600px">
+    <div class="card-header bg-danger text-white">Send Platform Notification</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Notification Type</label>
+        <input type="text" class="form-control" placeholder="e.g. ANNOUNCEMENT, MAINTENANCE…"
+               [(ngModel)]="type">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Message</label>
+        <textarea class="form-control" rows="4" placeholder="Enter notification message…"
+                  [(ngModel)]="message"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Target Audience</label>
+        <select class="form-select" [(ngModel)]="targetRole">
+          <option value="">All Users</option>
+          <option value="BUYER">Buyers Only</option>
+          <option value="SELLER">Sellers Only</option>
+          <option value="ADMIN">Admins Only</option>
+        </select>
+      </div>
+      <button class="btn btn-danger" (click)="send()" [disabled]="sending || !type.trim() || !message.trim()">
+        <span *ngIf="sending" class="spinner-border spinner-border-sm me-1"></span>
+        🚀 Send Notification
+      </button>
+    </div>
+  </div>
+</div>

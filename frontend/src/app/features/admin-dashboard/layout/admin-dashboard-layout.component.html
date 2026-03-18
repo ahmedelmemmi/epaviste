@@ -1,0 +1,51 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-2">
+          <div class="text-center mb-3 pt-2">
+            <span class="badge bg-danger fs-6">⚙️ Admin</span>
+          </div>
+          <nav class="nav flex-column">
+            <a class="nav-link rounded mb-1" routerLink="/admin/overview" routerLinkActive="active bg-danger text-white">
+              📊 Overview
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/users" routerLinkActive="active bg-danger text-white">
+              👥 Users
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/sellers" routerLinkActive="active bg-danger text-white">
+              🏪 Sellers
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/rfqs" routerLinkActive="active bg-danger text-white">
+              📋 RFQs
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/quotes" routerLinkActive="active bg-danger text-white">
+              💬 Quotes
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/orders" routerLinkActive="active bg-danger text-white">
+              📦 Orders
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/payments" routerLinkActive="active bg-danger text-white">
+              💳 Payments
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/disputes" routerLinkActive="active bg-danger text-white">
+              ⚖️ Disputes
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/reviews" routerLinkActive="active bg-danger text-white">
+              ⭐ Reviews
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/admin/notifications" routerLinkActive="active bg-danger text-white">
+              🔔 Notifications
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

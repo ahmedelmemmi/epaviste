@@ -4,6 +4,7 @@ import { HomeComponent } from './features/home/home.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { BuyerGuard } from './core/guards/buyer.guard';
 import { SellerGuard } from './core/guards/seller.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,6 +28,11 @@ const routes: Routes = [
     path: 'seller-dashboard',
     loadChildren: () => import('./features/seller-dashboard/seller-dashboard.module').then(m => m.SellerDashboardModule),
     canActivate: [AuthGuard, SellerGuard]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
+    canActivate: [AuthGuard, AdminGuard]
   },
   {
     path: 'orders',

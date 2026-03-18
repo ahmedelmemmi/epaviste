@@ -1,0 +1,57 @@
+<div>
+  <h4 class="mb-4">💬 Quote Monitoring</h4>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <div *ngIf="!loading" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>RFQ</th>
+            <th>Seller</th>
+            <th>Company</th>
+            <th>Price</th>
+            <th>Condition</th>
+            <th>Delivery (days)</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let quote of quotes">
+            <td>{{ quote.id }}</td>
+            <td>#{{ quote.rfqId }}</td>
+            <td>{{ quote.sellerName }}</td>
+            <td>{{ quote.sellerCompany || '—' }}</td>
+            <td>{{ quote.price | number:'1.2-2' }} TND</td>
+            <td>{{ quote.condition }}</td>
+            <td>{{ quote.deliveryTime }}</td>
+            <td>
+              <span class="badge"
+                    [class.bg-warning]="quote.status === 'PENDING'"
+                    [class.bg-success]="quote.status === 'ACCEPTED'"
+                    [class.bg-secondary]="quote.status === 'REJECTED'">
+                {{ quote.status }}
+              </span>
+            </td>
+            <td>{{ quote.createdAt | date:'mediumDate' }}</td>
+          </tr>
+          <tr *ngIf="quotes.length === 0">
+            <td colspan="9" class="text-center text-muted py-4">No quotes found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="totalPages > 1">
+      <button class="btn btn-sm btn-outline-secondary" (click)="prevPage()" [disabled]="currentPage === 0">← Prev</button>
+      <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next →</button>
+    </div>
+  </div>
+</div>

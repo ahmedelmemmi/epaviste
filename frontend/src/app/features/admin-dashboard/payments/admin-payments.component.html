@@ -1,0 +1,84 @@
+<div>
+  <h4 class="mb-4">💳 Payment &amp; Commission Monitoring</h4>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- Revenue Summary -->
+  <div *ngIf="revenue" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm bg-success text-white text-center">
+        <div class="card-body">
+          <div class="fs-2">💰</div>
+          <h5>{{ revenue.totalGMV | number:'1.2-2' }} TND</h5>
+          <p class="mb-0 small">Total GMV</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm bg-danger text-white text-center">
+        <div class="card-body">
+          <div class="fs-2">🏦</div>
+          <h5>{{ revenue.totalCommissionRevenue | number:'1.2-2' }} TND</h5>
+          <p class="mb-0 small">Commission Revenue</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center">
+        <div class="card-body">
+          <div class="fs-2">📦</div>
+          <h5>{{ revenue.totalOrdersCompleted }}</h5>
+          <p class="mb-0 small">Completed Orders</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transactions -->
+  <h6 class="mb-3">Transaction History</h6>
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <div *ngIf="!loading" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Order</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Escrow Released</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of transactions">
+            <td>{{ tx.id }}</td>
+            <td>#{{ tx.orderId }}</td>
+            <td>{{ tx.paymentMethod || '—' }}</td>
+            <td>
+              <span class="badge"
+                    [class.bg-warning]="tx.paymentStatus === 'PENDING'"
+                    [class.bg-success]="tx.paymentStatus === 'COMPLETED'"
+                    [class.bg-danger]="tx.paymentStatus === 'FAILED'">
+                {{ tx.paymentStatus }}
+              </span>
+            </td>
+            <td>{{ tx.escrowReleased ? '✅' : '⏳' }}</td>
+            <td>{{ tx.createdAt | date:'mediumDate' }}</td>
+          </tr>
+          <tr *ngIf="transactions.length === 0">
+            <td colspan="6" class="text-center text-muted py-4">No transactions found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="totalPages > 1">
+      <button class="btn btn-sm btn-outline-secondary" (click)="prevPage()" [disabled]="currentPage === 0">← Prev</button>
+      <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next →</button>
+    </div>
+  </div>
+</div>

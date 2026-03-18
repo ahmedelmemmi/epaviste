@@ -1,0 +1,103 @@
+<div>
+  <h4 class="mb-4">📊 Platform Overview</h4>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+    <p class="mt-2 text-muted">Loading statistics…</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="!loading && stats" class="row g-3">
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">👥</div>
+          <h5 class="card-title">{{ stats.totalUsers }}</h5>
+          <p class="card-text text-muted small">Total Users</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">🛒</div>
+          <h5 class="card-title">{{ stats.totalBuyers }}</h5>
+          <p class="card-text text-muted small">Buyers</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">🏪</div>
+          <h5 class="card-title">{{ stats.totalSellers }}</h5>
+          <p class="card-text text-muted small">Sellers</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">✅</div>
+          <h5 class="card-title">{{ stats.activeSellers }}</h5>
+          <p class="card-text text-muted small">Verified Sellers</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">📋</div>
+          <h5 class="card-title">{{ stats.totalRFQs }}</h5>
+          <p class="card-text text-muted small">Total RFQs</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">💬</div>
+          <h5 class="card-title">{{ stats.totalQuotes }}</h5>
+          <p class="card-text text-muted small">Total Quotes</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">📦</div>
+          <h5 class="card-title">{{ stats.totalOrdersCompleted }}</h5>
+          <p class="card-text text-muted small">Completed Orders</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <div class="fs-1">📈</div>
+          <h5 class="card-title">{{ stats.rfqToOrderConversionRate | number:'1.1-1' }}%</h5>
+          <p class="card-text text-muted small">RFQ→Order Conversion</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm bg-success text-white">
+        <div class="card-body text-center">
+          <div class="fs-1">💰</div>
+          <h5 class="card-title">{{ stats.totalGMV | number:'1.2-2' }} TND</h5>
+          <p class="card-text small">Total GMV</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm bg-danger text-white">
+        <div class="card-body text-center">
+          <div class="fs-1">🏦</div>
+          <h5 class="card-title">{{ stats.totalCommissionRevenue | number:'1.2-2' }} TND</h5>
+          <p class="card-text small">Commission Revenue</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

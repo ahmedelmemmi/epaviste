@@ -1,0 +1,64 @@
+<div>
+  <h4 class="mb-4">📋 RFQ Monitoring</h4>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <div *ngIf="!loading" class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Buyer</th>
+            <th>Car</th>
+            <th>Part</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Quotes</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rfq of rfqs">
+            <td>{{ rfq.id }}</td>
+            <td>{{ rfq.buyerName }}</td>
+            <td>{{ rfq.carBrand }} {{ rfq.carModel }} {{ rfq.carYear }}</td>
+            <td>{{ rfq.partName }}</td>
+            <td>{{ rfq.location }}</td>
+            <td>
+              <span class="badge"
+                    [class.bg-success]="rfq.status === 'OPEN'"
+                    [class.bg-secondary]="rfq.status === 'CLOSED'"
+                    [class.bg-primary]="rfq.status === 'FULFILLED'">
+                {{ rfq.status }}
+              </span>
+            </td>
+            <td>{{ rfq.quoteCount }}</td>
+            <td>{{ rfq.createdAt | date:'mediumDate' }}</td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button *ngIf="rfq.status === 'OPEN'" class="btn btn-outline-warning"
+                        (click)="close(rfq)">🚫 Close</button>
+                <button class="btn btn-outline-danger" (click)="delete(rfq)">🗑</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="rfqs.length === 0">
+            <td colspan="9" class="text-center text-muted py-4">No RFQs found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="totalPages > 1">
+      <button class="btn btn-sm btn-outline-secondary" (click)="prevPage()" [disabled]="currentPage === 0">← Prev</button>
+      <span class="text-muted small">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next →</button>
+    </div>
+  </div>
+</div>
