@@ -1,0 +1,96 @@
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible mb-3">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage=''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger alert-dismissible mb-3">
+  {{ errorMessage }}
+  <button type="button" class="btn-close" (click)="errorMessage=''"></button>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!loading">
+  <!-- Active Orders -->
+  <div class="mb-4">
+    <h5 class="mb-3">Active Orders</h5>
+    <div *ngIf="activeOrders.length === 0" class="text-muted text-center py-3">
+      No active orders.
+    </div>
+    <div class="card border-0 shadow-sm" *ngIf="activeOrders.length > 0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Order #</th>
+              <th>Seller</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of activeOrders">
+              <td class="fw-semibold">#{{ order.id }}</td>
+              <td>{{ order.sellerName }}</td>
+              <td class="fw-bold text-success">{{ order.totalPrice | currency:'TND':'symbol':'1.0-2' }}</td>
+              <td><span class="badge bg-{{ getStatusClass(order.orderStatus) }}">{{ order.orderStatus }}</span></td>
+              <td>{{ order.createdAt | date:'mediumDate' }}</td>
+              <td>
+                <button
+                  *ngIf="order.orderStatus === 'SHIPPED'"
+                  class="btn btn-sm btn-success"
+                  (click)="confirmDelivery(order.id)">
+                  Confirm Receipt
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History -->
+  <div>
+    <h5 class="mb-3">Order History</h5>
+    <div *ngIf="orderHistory.length === 0" class="text-muted text-center py-3">
+      No completed orders yet.
+    </div>
+    <div class="card border-0 shadow-sm" *ngIf="orderHistory.length > 0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Order #</th>
+              <th>Seller</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orderHistory">
+              <td class="fw-semibold">#{{ order.id }}</td>
+              <td>{{ order.sellerName }}</td>
+              <td class="fw-bold">{{ order.totalPrice | currency:'TND':'symbol':'1.0-2' }}</td>
+              <td><span class="badge bg-{{ getStatusClass(order.orderStatus) }}">{{ order.orderStatus }}</span></td>
+              <td>{{ order.createdAt | date:'mediumDate' }}</td>
+              <td>
+                <button
+                  *ngIf="order.orderStatus === 'DELIVERED'"
+                  class="btn btn-sm btn-outline-warning"
+                  (click)="leaveReview(order.id)">
+                  ⭐ Review
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

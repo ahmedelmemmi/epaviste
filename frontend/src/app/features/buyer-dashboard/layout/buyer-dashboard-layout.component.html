@@ -1,0 +1,39 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-2 col-md-3 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-2">
+          <nav class="nav flex-column">
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/overview" routerLinkActive="active bg-primary text-white">
+              📊 Overview
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/rfqs" routerLinkActive="active bg-primary text-white">
+              📋 My RFQs
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/quotes" routerLinkActive="active bg-primary text-white">
+              💬 Quotes
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/orders" routerLinkActive="active bg-primary text-white">
+              📦 Orders
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/reviews" routerLinkActive="active bg-primary text-white">
+              ⭐ Reviews
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/notifications" routerLinkActive="active bg-primary text-white">
+              🔔 Notifications
+            </a>
+            <a class="nav-link rounded mb-1" routerLink="/buyer-dashboard/settings" routerLinkActive="active bg-primary text-white">
+              ⚙️ Settings
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-10 col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

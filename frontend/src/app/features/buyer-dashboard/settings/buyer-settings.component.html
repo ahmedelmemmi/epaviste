@@ -1,0 +1,97 @@
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible mb-3">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage=''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger alert-dismissible mb-3">
+  {{ errorMessage }}
+  <button type="button" class="btn-close" (click)="errorMessage=''"></button>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!loading" class="row g-4">
+  <!-- Profile Settings -->
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">Personal Information</div>
+      <div class="card-body">
+        <div *ngIf="profile" class="mb-3 text-muted small">
+          <strong>Email:</strong> {{ profile.email }}
+          <span class="ms-3"><strong>Member since:</strong> {{ profile.createdAt | date:'mediumDate' }}</span>
+        </div>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="mb-3">
+            <label class="form-label">Full Name *</label>
+            <input formControlName="name" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input formControlName="phone" class="form-control" placeholder="+216 XX XXX XXX" />
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || saving">
+            <span *ngIf="saving" class="spinner-border spinner-border-sm me-1"></span>
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Garage / Saved Vehicles -->
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-bold">🚗 My Garage</span>
+        <button class="btn btn-sm btn-primary" (click)="showVehicleForm = !showVehicleForm">
+          {{ showVehicleForm ? 'Cancel' : '+ Add Vehicle' }}
+        </button>
+      </div>
+      <div class="card-body">
+        <!-- Add Vehicle Form -->
+        <div *ngIf="showVehicleForm" class="mb-4 border rounded p-3">
+          <h6 class="mb-3">Add New Vehicle</h6>
+          <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()">
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label">Brand *</label>
+                <input formControlName="brand" class="form-control form-control-sm" placeholder="e.g. Toyota" />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Model *</label>
+                <input formControlName="model" class="form-control form-control-sm" placeholder="e.g. Corolla" />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Year *</label>
+                <input formControlName="year" type="number" class="form-control form-control-sm" placeholder="e.g. 2018" />
+              </div>
+              <div class="col-6">
+                <label class="form-label">VIN</label>
+                <input formControlName="vin" class="form-control form-control-sm" placeholder="Optional" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-success mt-2" [disabled]="vehicleForm.invalid || addingVehicle">
+              <span *ngIf="addingVehicle" class="spinner-border spinner-border-sm me-1"></span>
+              Add to Garage
+            </button>
+          </form>
+        </div>
+
+        <!-- Vehicle List -->
+        <div *ngIf="vehicles.length === 0" class="text-muted text-center py-3">
+          No vehicles saved yet.
+        </div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let v of vehicles" class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <div>
+              <div class="fw-semibold">{{ v.brand }} {{ v.model }}</div>
+              <small class="text-muted">{{ v.year }}<span *ngIf="v.vin"> · VIN: {{ v.vin }}</span></small>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteVehicle(v.id)">Remove</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
