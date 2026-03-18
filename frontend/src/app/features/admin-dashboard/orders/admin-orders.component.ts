@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
+import { Order } from '../../../core/models/order.model';
 
 @Component({
   standalone: false,
@@ -7,7 +8,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-orders.component.html'
 })
 export class AdminOrdersComponent implements OnInit {
-  orders: any[] = [];
+  orders: Order[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';

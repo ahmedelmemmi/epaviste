@@ -16,9 +16,9 @@ import tn.epaviste.exception.ResourceNotFoundException;
 import tn.epaviste.repository.*;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +35,18 @@ public class AdminService {
     private final DisputeRepository disputeRepository;
     private final NotificationService notificationService;
     private final PasswordEncoder passwordEncoder;
+
+    private static final String PASSWORD_CHARS =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    private String generateSecurePassword() {
+        StringBuilder sb = new StringBuilder(12);
+        for (int i = 0; i < 12; i++) {
+            sb.append(PASSWORD_CHARS.charAt(SECURE_RANDOM.nextInt(PASSWORD_CHARS.length())));
+        }
+        return sb.toString();
+    }
 
     // ── Analytics ──────────────────────────────────────────────────────────────
 
@@ -98,7 +110,7 @@ public class AdminService {
     public AdminUserResponse resetUserPassword(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id));
-        String tempPassword = UUID.randomUUID().toString().substring(0, 8);
+        String tempPassword = generateSecurePassword();
         user.setPassword(passwordEncoder.encode(tempPassword));
         userRepository.save(user);
         notificationService.createNotification(user, "PASSWORD_RESET",

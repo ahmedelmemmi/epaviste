@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService, AdminStats } from '../../../core/services/admin.service';
+import { PaymentRecord } from '../../../core/models/seller.model';
 
 @Component({
   standalone: false,
@@ -8,7 +9,7 @@ import { AdminService, AdminStats } from '../../../core/services/admin.service';
 })
 export class AdminPaymentsComponent implements OnInit {
   revenue: AdminStats | null = null;
-  transactions: any[] = [];
+  transactions: PaymentRecord[] = [];
   loading = true;
   errorMessage = '';
   totalPages = 0;

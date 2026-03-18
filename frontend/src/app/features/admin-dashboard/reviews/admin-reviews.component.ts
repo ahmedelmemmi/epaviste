@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../../core/services/admin.service';
+import { AdminService, AdminReview } from '../../../core/services/admin.service';
 
 @Component({
   standalone: false,
@@ -7,7 +7,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-reviews.component.html'
 })
 export class AdminReviewsComponent implements OnInit {
-  reviews: any[] = [];
+  reviews: AdminReview[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';

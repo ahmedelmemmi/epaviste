@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
+import { Quote } from '../../../core/models/quote.model';
 
 @Component({
   standalone: false,
@@ -7,7 +8,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-quotes.component.html'
 })
 export class AdminQuotesComponent implements OnInit {
-  quotes: any[] = [];
+  quotes: Quote[] = [];
   loading = true;
   errorMessage = '';
   totalPages = 0;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
+import { SellerProfile } from '../../../core/models/seller.model';
 
 @Component({
   standalone: false,
@@ -7,7 +8,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-sellers.component.html'
 })
 export class AdminSellersComponent implements OnInit {
-  sellers: any[] = [];
+  sellers: SellerProfile[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';

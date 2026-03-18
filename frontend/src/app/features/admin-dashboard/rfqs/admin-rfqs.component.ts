@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
+import { RFQ } from '../../../core/models/rfq.model';
 
 @Component({
   standalone: false,
@@ -7,7 +8,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-rfqs.component.html'
 })
 export class AdminRfqsComponent implements OnInit {
-  rfqs: any[] = [];
+  rfqs: RFQ[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';
