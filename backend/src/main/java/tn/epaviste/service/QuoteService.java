@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.epaviste.dto.request.QuoteRequest;
+import tn.epaviste.dto.request.UpdateQuoteRequest;
 import tn.epaviste.dto.response.QuoteResponse;
 import tn.epaviste.entity.*;
 import tn.epaviste.enums.*;
@@ -148,6 +149,39 @@ public class QuoteService {
         );
 
         return toResponse(quote);
+    }
+
+    @Transactional
+    public QuoteResponse updateQuote(Long quoteId, UpdateQuoteRequest request, String email) {
+        User seller = getUserByEmail(email);
+        Quote quote = quoteRepository.findById(quoteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Quote", quoteId));
+        if (!quote.getSeller().getId().equals(seller.getId())) {
+            throw new UnauthorizedException("You can only update your own quotes");
+        }
+        if (quote.getStatus() != QuoteStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending quotes can be updated");
+        }
+        if (request.getPrice() != null) quote.setPrice(request.getPrice());
+        if (request.getCondition() != null) quote.setCondition(request.getCondition());
+        if (request.getDeliveryTime() != null) quote.setDeliveryTime(request.getDeliveryTime());
+        if (request.getShippingMethod() != null) quote.setShippingMethod(request.getShippingMethod());
+        if (request.getMessage() != null) quote.setMessage(request.getMessage());
+        return toResponse(quoteRepository.save(quote));
+    }
+
+    @Transactional
+    public void withdrawQuote(Long quoteId, String email) {
+        User seller = getUserByEmail(email);
+        Quote quote = quoteRepository.findById(quoteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Quote", quoteId));
+        if (!quote.getSeller().getId().equals(seller.getId())) {
+            throw new UnauthorizedException("You can only withdraw your own quotes");
+        }
+        if (quote.getStatus() != QuoteStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending quotes can be withdrawn");
+        }
+        quoteRepository.delete(quote);
     }
 
     private User getUserByEmail(String email) {

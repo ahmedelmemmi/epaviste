@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tn.epaviste.dto.request.QuoteRequest;
+import tn.epaviste.dto.request.UpdateQuoteRequest;
 import tn.epaviste.dto.response.QuoteResponse;
 import tn.epaviste.service.QuoteService;
 
@@ -56,6 +57,24 @@ public class QuoteController {
     @GetMapping("/my")
     public ResponseEntity<List<QuoteResponse>> getMyQuotes(Authentication authentication) {
         return ResponseEntity.ok(quoteService.getMyQuotes(authentication.getName()));
+    }
+
+    @Operation(summary = "Update a quote", description = "Seller updates a pending quote")
+    @PutMapping("/{id}")
+    public ResponseEntity<QuoteResponse> updateQuote(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateQuoteRequest request,
+            Authentication authentication) {
+        return ResponseEntity.ok(quoteService.updateQuote(id, request, authentication.getName()));
+    }
+
+    @Operation(summary = "Withdraw a quote", description = "Seller withdraws a pending quote")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> withdrawQuote(
+            @PathVariable Long id,
+            Authentication authentication) {
+        quoteService.withdrawQuote(id, authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Accept a quote",

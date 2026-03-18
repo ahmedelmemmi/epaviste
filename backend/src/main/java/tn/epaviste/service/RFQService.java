@@ -69,6 +69,11 @@ public class RFQService {
         return toResponse(saved);
     }
 
+    public Page<RFQResponse> listOpenRFQsWithFilters(String carBrand, String carModel, String partCategory, String location, Pageable pageable) {
+        return rfqRepository.findByStatusAndFilters(RFQStatus.OPEN, carBrand, carModel, partCategory, location, pageable)
+                .map(this::toResponse);
+    }
+
     public Page<RFQResponse> listOpenRFQs(Pageable pageable) {
         return rfqRepository.findByStatus(RFQStatus.OPEN, pageable).map(this::toResponse);
     }
