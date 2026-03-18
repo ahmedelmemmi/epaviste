@@ -1,0 +1,84 @@
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2 text-muted">Loading dashboard...</p>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && stats">
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-primary">{{ stats.totalRFQsSubmitted }}</div>
+        <div class="text-muted small mt-1">RFQs Submitted</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-warning">{{ stats.quotesReceived }}</div>
+        <div class="text-muted small mt-1">Quotes Received</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-info">{{ stats.activeOrders }}</div>
+        <div class="text-muted small mt-1">Active Orders</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="display-6 fw-bold text-success">{{ stats.completedOrders }}</div>
+        <div class="text-muted small mt-1">Completed Orders</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold">Latest Notifications</div>
+    <div class="card-body p-0">
+      <div *ngIf="stats.recentNotifications.length === 0" class="p-3 text-muted text-center">
+        No notifications yet.
+      </div>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let n of stats.recentNotifications" class="list-group-item d-flex justify-content-between align-items-start">
+          <div>
+            <span class="badge bg-secondary me-2">{{ n.type }}</span>
+            {{ n.message }}
+          </div>
+          <small class="text-muted text-nowrap ms-2">{{ n.createdAt | date:'shortDate' }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <a routerLink="/buyer-dashboard/rfqs" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">📋</div>
+        <div class="fw-bold">My RFQs</div>
+        <small class="text-muted">Submit and manage requests</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/buyer-dashboard/quotes" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">💬</div>
+        <div class="fw-bold">Compare Quotes</div>
+        <small class="text-muted">Review and accept quotes</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/buyer-dashboard/orders" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">📦</div>
+        <div class="fw-bold">My Orders</div>
+        <small class="text-muted">Track order status</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a routerLink="/buyer-dashboard/settings" class="card border-0 shadow-sm text-center p-4 text-decoration-none d-block h-100">
+        <div class="fs-2 mb-2">🚗</div>
+        <div class="fw-bold">My Garage</div>
+        <small class="text-muted">Manage saved vehicles</small>
+      </a>
+    </div>
+  </div>
+</div>

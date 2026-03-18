@@ -1,0 +1,79 @@
+<div class="row g-4">
+  <!-- Order Selector -->
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">Completed Orders</div>
+      <div class="card-body p-0">
+        <div *ngIf="loading" class="text-center py-3">
+          <div class="spinner-border spinner-border-sm text-primary"></div>
+        </div>
+        <div *ngIf="!loading && deliveredOrders.length === 0" class="p-3 text-muted text-center">
+          No completed orders to review.
+        </div>
+        <div class="list-group list-group-flush">
+          <button
+            *ngFor="let order of deliveredOrders"
+            type="button"
+            class="list-group-item list-group-item-action"
+            [class.active]="selectedOrder?.id === order.id"
+            (click)="selectOrder(order)">
+            <div class="fw-semibold">Order #{{ order.id }}</div>
+            <small>Seller: {{ order.sellerName }}</small><br>
+            <small>{{ order.totalPrice | currency:'TND':'symbol':'1.0-2' }}</small>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Form -->
+  <div class="col-md-8">
+    <div *ngIf="!selectedOrder && !successMessage" class="text-center py-5 text-muted">
+      <div class="fs-1 mb-2">⭐</div>
+      <p>Select a completed order to leave a review.</p>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="selectedOrder" class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold">Review Order #{{ selectedOrder.id }}</div>
+      <div class="card-body">
+        <p class="text-muted mb-3">Rate your experience with <strong>{{ selectedOrder.sellerName }}</strong></p>
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+          <div class="mb-3">
+            <label class="form-label">Rating *</label>
+            <div class="d-flex gap-2">
+              <div *ngFor="let r of ratings" class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  [id]="'rating-' + r"
+                  formControlName="rating"
+                  [value]="r" />
+                <label class="form-check-label" [for]="'rating-' + r">
+                  {{ r }} ⭐
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Comment *</label>
+            <textarea formControlName="comment" class="form-control" rows="4" placeholder="Describe your experience..."></textarea>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="reviewForm.invalid || submitting">
+              <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+              Submit Review
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="selectedOrder = null">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

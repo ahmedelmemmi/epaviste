@@ -14,6 +14,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, BuyerGuard]
   },
   {
+    path: 'buyer-dashboard',
+    loadChildren: () => import('./features/buyer-dashboard/buyer-dashboard.module').then(m => m.BuyerDashboardModule),
+    canActivate: [AuthGuard, BuyerGuard]
+  },
+  {
     path: 'seller',
     loadChildren: () => import('./features/seller/seller.module').then(m => m.SellerModule),
     canActivate: [AuthGuard, SellerGuard]

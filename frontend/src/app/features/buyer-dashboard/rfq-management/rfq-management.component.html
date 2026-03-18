@@ -1,0 +1,124 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="mb-0">My RFQs</h4>
+  <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm">
+    {{ showCreateForm ? 'Cancel' : '+ New RFQ' }}
+  </button>
+</div>
+
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible">
+  {{ successMessage }}
+  <button type="button" class="btn-close" (click)="successMessage=''"></button>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger alert-dismissible">
+  {{ errorMessage }}
+  <button type="button" class="btn-close" (click)="errorMessage=''"></button>
+</div>
+
+<!-- Create RFQ Form -->
+<div *ngIf="showCreateForm" class="card border-0 shadow-sm mb-4">
+  <div class="card-header bg-white fw-bold">Submit New RFQ</div>
+  <div class="card-body">
+    <form [formGroup]="rfqForm" (ngSubmit)="submitRFQ()">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Car Brand *</label>
+          <input formControlName="carBrand" class="form-control" placeholder="e.g. Toyota" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Car Model *</label>
+          <input formControlName="carModel" class="form-control" placeholder="e.g. Corolla" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Year *</label>
+          <input formControlName="carYear" type="number" class="form-control" placeholder="e.g. 2018" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">VIN</label>
+          <input formControlName="vin" class="form-control" placeholder="Optional" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Part Name *</label>
+          <input formControlName="partName" class="form-control" placeholder="e.g. Brake Pad" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Part Category *</label>
+          <input formControlName="partCategory" class="form-control" placeholder="e.g. Brakes" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Preferred Condition *</label>
+          <select formControlName="preferredCondition" class="form-select">
+            <option *ngFor="let c of conditions" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Location *</label>
+          <input formControlName="location" class="form-control" placeholder="e.g. Tunis" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description *</label>
+          <textarea formControlName="description" class="form-control" rows="3" placeholder="Describe the part you need..."></textarea>
+        </div>
+      </div>
+      <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary" [disabled]="rfqForm.invalid || submitting">
+          <span *ngIf="submitting" class="spinner-border spinner-border-sm me-1"></span>
+          Submit RFQ
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="showCreateForm = false">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- RFQ List -->
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!loading && rfqs.length === 0" class="text-center py-5 text-muted">
+  <div class="fs-1 mb-2">📋</div>
+  <p>No RFQs yet. Submit your first request!</p>
+</div>
+
+<div *ngIf="!loading && rfqs.length > 0" class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Part</th>
+          <th>Vehicle</th>
+          <th>Status</th>
+          <th>Quotes</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rfq of rfqs">
+          <td>
+            <div class="fw-semibold">{{ rfq.partName }}</div>
+            <small class="text-muted">{{ rfq.partCategory }}</small>
+          </td>
+          <td>{{ rfq.carBrand }} {{ rfq.carModel }} ({{ rfq.carYear }})</td>
+          <td>
+            <span class="badge bg-{{ getStatusClass(rfq.status) }}">{{ rfq.status }}</span>
+          </td>
+          <td>
+            <span class="badge bg-info text-dark">{{ rfq.quoteCount }}</span>
+          </td>
+          <td>{{ rfq.createdAt | date:'mediumDate' }}</td>
+          <td>
+            <div class="d-flex gap-1">
+              <button *ngIf="rfq.quoteCount > 0" class="btn btn-sm btn-outline-primary" (click)="viewQuotes(rfq.id)">
+                View Quotes
+              </button>
+              <button *ngIf="rfq.status === 'OPEN'" class="btn btn-sm btn-outline-danger" (click)="cancelRFQ(rfq.id)">
+                Cancel
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
