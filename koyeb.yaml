@@ -1,15 +1,9 @@
-# Koyeb service definition for the epaviste backend (Spring Boot / Docker)
+# DEPRECATED — This project has migrated from Koyeb to Render (free tier).
+# The backend is now deployed via render.yaml alongside the frontend.
+# This file is kept for historical reference only and is no longer used.
+#
+# Original Koyeb service definition for the epaviste backend (Spring Boot / Docker)
 # Free tier: nano instance — 0.1 vCPU, 512 MB RAM
-#
-# USAGE:
-#   1. Install Koyeb CLI: https://www.koyeb.com/docs/cli
-#   2. Set the required env vars in the Koyeb dashboard (see DEPLOYMENT.md)
-#      OR replace the placeholder values below before running:
-#        koyeb deploy -f koyeb.yaml
-#
-# NOTE: Sensitive values (SPRING_DATASOURCE_URL, SPRING_DATASOURCE_PASSWORD,
-#       APP_JWT_SECRET) should be set through the Koyeb dashboard as secrets,
-#       not stored in this file.
 
 name: epaviste-backend
 services:
