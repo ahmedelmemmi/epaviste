@@ -55,8 +55,5 @@ services:
         value: strict-origin-when-cross-origin
     routes:
       - type: rewrite
-        source: /api/*
-        destination: https://epaviste-backend.onrender.com/api/:splat
-      - type: rewrite
         source: /*
         destination: /index.html
