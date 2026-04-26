@@ -10,10 +10,12 @@ services:
     healthCheckPath: /actuator/health
     envVars:
       # --- Database (from Neon.tech) ---
+      # JDBC URL has no credentials embedded — safe to commit
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        value: "jdbc:postgresql://ep-square-frog-amlmj1rn.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require"
       - key: SPRING_DATASOURCE_USERNAME
         value: neondb_owner
+      # Set SPRING_DATASOURCE_PASSWORD in the Render dashboard (never commit the secret)
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false
 

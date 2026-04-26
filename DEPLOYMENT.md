@@ -15,17 +15,11 @@ This guide walks you through deploying the full stack for **free** using Render 
 
 ## Step 1 — Create a free PostgreSQL database on Neon
 
-1. Go to [https://neon.tech](https://neon.tech) and sign up (no credit card needed).
-2. Create a new **Project** (e.g. `epaviste`).
-3. Neon auto-creates a database. In the **Connection Details** panel:
-   - Select the **JDBC** connection string format.
-   - Copy the full string — it looks like:
-     ```
-     jdbc:postgresql://ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
-     ```
-4. Also note the **Username** and **Password** shown in that panel.
+The Neon database (`ep-square-frog-amlmj1rn.c-5.us-east-1.aws.neon.tech / neondb`) is already provisioned and the JDBC URL is wired into `render.yaml`.
 
-Keep these three values — you will need them in Step 3.
+All you need from the Neon dashboard is the **database password**, which you will enter in the Render dashboard in Step 3.
+
+> To find or reset your password: go to [https://console.neon.tech](https://console.neon.tech) → select the project → **Connection Details** → show the password field.
 
 ---
 
@@ -45,31 +39,31 @@ Keep these three values — you will need them in Step 3.
 
 ## Step 3 — Set secret environment variables for the backend
 
-After the Blueprint is applied, open the **epaviste-backend** service in the Render dashboard:
+The Neon DB connection URL and username are already wired in `render.yaml` — **no need to copy them manually**.
+You only need to set the two remaining secrets in the Render dashboard.
 
-1. Go to **Environment → Environment Variables**.
-2. Add (or update) the following variables marked `sync: false` in `render.yaml`:
+After the Blueprint is applied, open the **epaviste-backend** service → **Environment → Environment Variables** and add:
 
-   | Key | Value |
-   |-----|-------|
-   | `SPRING_DATASOURCE_URL` | The JDBC URL from Neon (Step 1), e.g. `jdbc:postgresql://ep-xxxx.../neondb?sslmode=require` |
-   | `SPRING_DATASOURCE_PASSWORD` | Neon password |
-   | `APP_JWT_SECRET` | A random string of **at least 32 characters** |
+| Key | Value |
+|-----|-------|
+| `SPRING_DATASOURCE_PASSWORD` | Neon DB password |
+| `APP_JWT_SECRET` | A random string of **at least 32 characters** |
 
-   > **Tip**: Use Render's **Secret File** or mark each value as a secret to avoid leaking it in logs.
+> **Tip**: Mark both values as **Secret** in the Render dashboard to prevent them appearing in logs.
 
-   The following variables are already set by `render.yaml` and do not need to be changed unless your Neon username differs:
+The following variables are already preset in `render.yaml` and do not need to be entered manually:
 
-   | Key | Default in render.yaml |
-   |-----|------------------------|
-   | `SPRING_DATASOURCE_USERNAME` | `neondb_owner` |
-   | `APP_JWT_EXPIRATION` | `86400000` |
-   | `APP_CORS_ALLOWED_ORIGINS` | `https://epaviste-frontend.onrender.com` |
-   | `APP_COMMISSION_RATE` | `0.10` |
-   | `SPRING_JPA_HIBERNATE_DDL_AUTO` | `update` |
-   | `SPRING_PROFILES_ACTIVE` | `prod` |
+| Key | Value in render.yaml |
+|-----|----------------------|
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://ep-square-frog-amlmj1rn.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require` |
+| `SPRING_DATASOURCE_USERNAME` | `neondb_owner` |
+| `APP_JWT_EXPIRATION` | `86400000` |
+| `APP_CORS_ALLOWED_ORIGINS` | `https://epaviste-frontend.onrender.com` |
+| `APP_COMMISSION_RATE` | `0.10` |
+| `SPRING_JPA_HIBERNATE_DDL_AUTO` | `update` |
+| `SPRING_PROFILES_ACTIVE` | `prod` |
 
-3. Click **Save Changes** — Render will automatically trigger a new deploy for the backend.
+Click **Save Changes** — Render will automatically trigger a new deploy for the backend.
 
 ---
 
