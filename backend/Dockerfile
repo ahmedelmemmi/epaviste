@@ -11,4 +11,5 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Limit JVM heap to fit within Koyeb free-tier (512 MB RAM)
+ENTRYPOINT ["java", "-Xmx200m", "-Xms128m", "-jar", "app.jar"]
